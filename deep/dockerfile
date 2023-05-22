@@ -40,7 +40,7 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 #ENV NODE_VERSION=$NODE_VERSION
 # path
 ENV SETUP_PATH=$SETUP_PATH
-ENV VENV_PATH=$VENV_PATH
+ENV VENV_PATH="$SETUP_PATH/.venv"
 #ENV NVM_PATH="/root/.nvm"
 
 # prepend poetry, venv, nvm to path
@@ -72,7 +72,7 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 #RUN node --version
 #RUN npm --version
 
-# copy project requirement files here to ensure they will be cached
+# copy project requirement files here to ensure they will be cached.
 WORKDIR $SETUP_PATH
 COPY pyproject.toml $SETUP_PATH
 
