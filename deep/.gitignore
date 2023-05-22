@@ -1,0 +1,14 @@
+### ignore ###
+.env
+__pycache__
+poetry.lock
+**/node_modules
+#**/static/*
+**/staticfiles
+
+# ignore generated files
+**/*.pyc
+
+### allow ###
+!.env.example
+#!**/static/.gitkeep

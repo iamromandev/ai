@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "deep"
+version = "0.0.1"
+description = ""
+authors = ["Roman <iamromandev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.16"
+# reserved packages
+requests = "2.29.0" # for namecheap host issue
+# end reserved packages
+loguru = "0.7.0"
+django = "4.1.9" # 4.2 drops support for mariadb 10.3
+django-environ = "0.10.0"
+django-browser-reload = "1.8.0"
+#django-tailwind = "3.5.0"
+dj-static = "0.0.6"
+django-bootstrap5 = "23.1"
+django-bootstrap-icons = "0.8.3"
+django-soft-delete = "0.9.21"
+django-taggit = "4.0.0"
+djangorestframework = "3.14.0"
+pymysql = "1.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
