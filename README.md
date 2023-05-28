@@ -1,4 +1,4 @@
-# A handfull note on AI created with LOVE.
+# A minimal note on AI created with LOVE.
 
 ### Gradient Descent
 
