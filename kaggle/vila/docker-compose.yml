@@ -1,6 +1,6 @@
 services:
   web:
-    platform: linux/arm64
+    platform: linux/amd64
     hostname: web
     container_name: web
     build:
