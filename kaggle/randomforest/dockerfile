@@ -1,0 +1,75 @@
+### base image ###
+ARG PYTHON_VERSION=3.11.4
+
+FROM python:$PYTHON_VERSION AS base
+
+## arguments ##
+# env
+ARG ENV
+# workdir
+ARG WORK_DIR
+# poetry
+ARG POETRY_HOME="/opt/poetry"
+ARG POETRY_VERSION=1.5.1
+# path
+ARG SETUP_PATH="/opt/setup"
+
+## environments ##
+# env
+ENV ENV=$ENV
+# workdir
+ENV WORK_DIR=$WORK_DIR
+# python
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONFAULTHANDLER=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONHASHSEED=random
+# pip
+#ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+#ENV PIP_NO_CACHE_DIR=1
+#ENV PIP_DEFAULT_TIMEOUT=100
+# poetry
+ENV POETRY_HOME=$POETRY_HOME
+ENV POETRY_VERSION=$POETRY_VERSION
+ENV POETRY_NO_ANSI=1
+ENV POETRY_NO_INTERACTION=1
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+# path
+ENV SETUP_PATH=$SETUP_PATH
+ENV VENV_PATH="$SETUP_PATH/.venv"
+
+# prepend poetry, venv, nvm to path
+ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+
+### builder image ###
+FROM base AS builder
+
+ARG ENV
+ARG WORK_DIR
+
+ENV ENV=$ENV
+ENV WORK_DIR=$WORK_DIR
+
+# install poetry - respects $POETRY_VERSION & $POETRY_HOME
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# copy project requirement files here to ensure they will be cached.
+WORKDIR $SETUP_PATH
+COPY pyproject.toml $SETUP_PATH
+
+# install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
+RUN poetry install --sync
+
+### local image ###
+FROM base AS local
+
+ARG ENV
+ARG WORK_DIR
+
+ENV ENV=$ENV
+ENV WORK_DIR=$WORK_DIR
+
+WORKDIR $WORK_DIR
+
+COPY --from=builder $SETUP_PATH $SETUP_PATH
+COPY . $WORK_DIR

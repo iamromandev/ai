@@ -1,0 +1,27 @@
+services:
+  web:
+    platform: linux/arm64
+    hostname: web
+    container_name: web
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: local
+      args:
+        ENV: local
+        WORK_DIR: /workdir
+        PYTHON_VERSION: 3.11.4
+    ports:
+      - 8100:8100
+    volumes:
+      - .:/workdir
+    networks:
+      - web
+    command: >
+      bash -c "uvicorn src.main:app --reload --workers 1 --host 0.0.0.0 --port 8100"
+    restart: unless-stopped
+
+networks:
+  web:
+    name: web
+    driver: bridge

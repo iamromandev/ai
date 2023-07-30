@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "randomforest"
+version = "0.0.1"
+description = ""
+authors = ["Roman <iamromandev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.4"
+loguru = "0.7.0"
+uvicorn = "0.23.1"
+pandas = "2.0.3"
+scikit-learn = "1.3.0"
+tensorflow = "2.13.0"
+seaborn = "0.12.2"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "2.17.5"
+mypy = "1.4.1"
+black = "23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
