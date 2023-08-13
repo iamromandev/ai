@@ -61,6 +61,8 @@ services:
       - db
     volumes:
       - .:/workdir
+      - ./data/input:/data/input:ro
+      - ./data/output:/data/output:rw
     networks:
       - web
     depends_on:
