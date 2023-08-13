@@ -1,7 +1,7 @@
 services:
   db:
     platform: linux/arm64
-    image: mariadb
+    image: mariadb:10.11
     hostname: db
     container_name: db
     environment:
@@ -13,9 +13,11 @@ services:
       - 3306:3306
     volumes:
       - ./data/db:/var/lib/mysql/data
-    command: [ 'mysqld', '--character-set-server=utf8', '--collation-server=utf8_unicode_ci' ]
+    networks:
+      - web
+    command: [ "mysqld", "--character-set-server=utf8", "--collation-server=utf8_unicode_ci" ]
     healthcheck:
-      test: [ 'CMD', 'mysqladmin', 'ping', '-h', 'localhost' ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       start_period: 3s
       interval: 5s
       timeout: 3s
@@ -52,13 +54,15 @@ services:
       args:
         ENV: local
         WORK_DIR: /workdir
-        PYTHON_VERSION: 3.9.16
+        PYTHON_VERSION: 3.11.4
     ports:
       - 8000:8000
     links:
       - db
     volumes:
       - .:/workdir
+    networks:
+      - web
     depends_on:
       db:
         condition: service_healthy
@@ -68,3 +72,8 @@ services:
       && python src/manage.py migrate
       && python src/manage.py runserver 0.0.0.0:8000"
     restart: unless-stopped
+
+networks:
+  web:
+    name: web
+    driver: bridge

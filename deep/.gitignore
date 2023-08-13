@@ -2,9 +2,11 @@
 .env
 __pycache__
 poetry.lock
-**/node_modules
+#**/node_modules
 #**/static/*
+#**/media/*
 **/staticfiles
+**/mediafiles
 
 # ignore generated files
 **/*.pyc

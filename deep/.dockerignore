@@ -1,8 +1,10 @@
 ### ignore ###
 __pycache__
 poetry.lock
-**/node_modules
-**/static_files/*
+#**/staticfiles
+#**/mediafiles
+#**/node_modules
+#**/static_files/*
 
 # ignore generated files
 **/*.pyc
