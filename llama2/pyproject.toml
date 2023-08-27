@@ -7,54 +7,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.11.4"
-## reserved packages
-#requests = "2.29.0" # for namecheap host issue
-## end reserved packages
-## core
 loguru = "0.7.0"
-coreapi = "2.3.3" # must be installed for TokenAuthentication
-## django
-django = "4.2.4" # 4.2 drops support for mariadb 10.3
-django-environ = "0.10.0"
-django-cors-headers = "4.2.0"
-django-browser-reload = "1.11.0"
-dj-static = "0.0.6"
-django-soft-delete = "0.9.21"
-django-taggit = "4.0.0"
-## rest
-djangorestframework = "3.14.0"
-djangorestframework-simplejwt = "5.2.2"
-#dj-rest-auth = "4.0.1"
-## ui
-django-bootstrap5 = "23.1"
-django-bootstrap-icons = "0.8.3"
-# django-tailwind = "3.5.0"
-## others
+uvicorn = "0.23.1"
+fastapi = { extras = ["all"], version = "0.96.0" }
+pydantic = { extras = ["all"], version = "1.10.12" }
+sqlmodel = "0.0.8"
 pymysql = "1.1.0"
-# others
-
-
-#[tool.poetry.group.dev.dependencies]
-#pre-commit = "3.3.3"
-#pylint-django = "^2.5.3"
-#
-#[tool.black]
-#line-length = 120
-#target-version = ["py311"]
-#include = '\.pyi?$'
-#
-#[tool.isort]
-#profile = "django"
-#combine_as_imports = true
-#include_trailing_comma = true
-#line_length = 120
-#
-#[tool.djlint]
-#profile="django"
-#ignore = "H031"
-#
-#[tool.ruff]
-#line-length = 120
+celery = "5.3.1"
 
 [build-system]
 requires = ["poetry-core"]
