@@ -4,11 +4,12 @@ services:
     image: mariadb:10.11
     hostname: db
     container_name: db
+    restart: on-failure
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - 3306:3306
     volumes:
@@ -22,7 +23,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-    restart: on-failure
 
 #  theme:
 #    platform: linux/arm64
@@ -47,6 +47,7 @@ services:
     platform: linux/arm64
     hostname: web
     container_name: web
+    restart: unless-stopped
     build:
       context: .
       dockerfile: dockerfile
@@ -73,7 +74,6 @@ services:
       && python src/manage.py makemigrations
       && python src/manage.py migrate
       && python src/manage.py runserver 0.0.0.0:8000"
-    restart: unless-stopped
 
 networks:
   web:
