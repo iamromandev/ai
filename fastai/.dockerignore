@@ -1,0 +1,13 @@
+### ignore ###
+__pycache__
+poetry.lock
+#**/static/*
+#**/media/*
+**/staticfiles
+**/mediafiles
+
+# ignore generated files
+**/*.pyc
+
+### allow ###
+!.env.example
