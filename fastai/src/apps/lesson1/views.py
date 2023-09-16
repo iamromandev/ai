@@ -44,3 +44,10 @@ def train_model(request):
 
     data = status
     return HttpResponse(json.dumps(data, sort_keys=False, indent=4))
+
+
+def predict(request):
+    status = services.predict()
+
+    data = status
+    return HttpResponse(json.dumps(data, sort_keys=False, indent=4))

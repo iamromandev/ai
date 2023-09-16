@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 
 from loguru import logger
@@ -19,7 +20,8 @@ from fastai.vision.all import (
     parent_label,
     vision_learner,
     resnet18,
-    error_rate
+    error_rate,
+    PILImage,
 )
 from fastdownload import download_url
 
@@ -90,5 +92,41 @@ def train_model():
 
     return {"Status": "Completed"}
 
-def predict():
 
+def listdirs(folder):
+    import os
+    return [d for d in os.listdir(folder) if os.path.isdir(os.path.join(folder, d))]
+
+
+def predict():
+    # images = get_image_files(IMAGE_PARENT)
+
+    # random.seed(0)
+    # random_images = random.sample(images, 1)
+
+    # logger.debug(f"Image Type {type(random_images)} {len(random_images)}")
+    # return {"Predict": str(random_images[0])}
+
+    dirs = listdirs(IMAGE_PARENT)
+    category = random.choice(dirs)
+    category_dir = IMAGE_PARENT.joinpath(category)
+
+    images = get_image_files(category_dir)
+    image = random.choice(images)
+
+    predict_category = None
+    probs = [0]
+
+    global LEARN_MODEL
+    if LEARN_MODEL:
+        predict_category, _, probs = LEARN_MODEL.predict(PILImage.create(image))
+        logger.debug(f"This is a: {predict_category}.")
+        logger.debug(f"Probability it's a {predict_category}: {probs[0]:.4f}")
+
+
+    return {
+        "category": category,
+        "image": str(image),
+        "predict": predict_category,
+        "probability": f"{probs[0]:.4f}"
+    }
