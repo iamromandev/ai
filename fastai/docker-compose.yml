@@ -1,9 +1,30 @@
 services:
+  cache:
+    platform: linux/arm64
+    image: redis
+    hostname: cache
+    container_name: cache
+    restart: on-failure
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/cache:/var/lib/redis
+      - ./data/cache-config:/usr/local/etc/redis/redis.conf
+    networks:
+      - web
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      start_period: 3s
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
   db:
     platform: linux/arm64
-    image: mariadb:10.5
+    image: mariadb:10.11
     hostname: db
     container_name: db
+    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -22,12 +43,12 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-    restart: on-failure
 
   web:
     platform: linux/arm64
     hostname: web
     container_name: web
+    restart: unless-stopped
     build:
       context: .
       dockerfile: dockerfile
@@ -47,6 +68,8 @@ services:
     networks:
       - web
     depends_on:
+      cache:
+        condition: service_healthy
       db:
         condition: service_healthy
     command: >
@@ -56,8 +79,6 @@ services:
       && python src/manage.py createcachetable
       && python src/manage.py runserver 0.0.0.0:8000"
     # after createcachetable && python src/manage.py createsuperuser --no-input --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL}
-
-    restart: unless-stopped
 
 networks:
   web:

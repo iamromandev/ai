@@ -215,5 +215,5 @@ AUTHENTICATION_BACKENDS = [
     # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 1
-CORS_ORIGIN_ALLOW_ALL = True
+SITE_ID = env.int("SITE_ID", default=1)
+CORS_ORIGIN_ALLOW_ALL = env.bool("CORS_ORIGIN_ALLOW_ALL", default=True)

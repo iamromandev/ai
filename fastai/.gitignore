@@ -6,6 +6,7 @@ poetry.lock
 #**/media/*
 **/staticfiles
 **/mediafiles
+data
 
 # ignore generated files
 **/*.pyc
