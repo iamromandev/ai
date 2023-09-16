@@ -37,3 +37,10 @@ def download_all_image(request):
         "images": [fi for fi in fastai_images],
     }
     return HttpResponse(json.dumps(data, sort_keys=False, indent=4))
+
+
+def train_model(request):
+    status = services.train_model()
+
+    data = status
+    return HttpResponse(json.dumps(data, sort_keys=False, indent=4))

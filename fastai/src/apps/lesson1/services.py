@@ -6,18 +6,28 @@ from duckduckgo_search import ddg_images
 from fastcore.all import (
     L as FASTAI_LIST,
 )
-from fastai.vision.utils import (
+from fastai.vision.all import (
     download_images,
     resize_images,
     verify_images,
     get_image_files,
+    DataBlock,
+    ImageBlock,
+    CategoryBlock,
+    RandomSplitter,
+    Resize,
+    parent_label,
+    vision_learner,
+    resnet18,
+    error_rate
 )
 from fastdownload import download_url
 
 from config.settings import BASE_DIR
 
-IMAGE_PARENT = BASE_DIR.joinpath('data/output')
+IMAGE_PARENT = BASE_DIR.joinpath('data/output/lesson1')
 MAX_RESULTS = 10
+LEARN_MODEL = None
 
 
 def search_images(query: str, max_results: int = 0) -> FASTAI_LIST:
@@ -56,9 +66,29 @@ def download_all_image(category: str) -> list:
     # remove corrupted images
     failed = verify_images(get_image_files(saving_dir))
     failed.map(Path.unlink)
-    # len(failed)
 
     for image in images:
         logger.debug(image)
 
     return images
+
+
+def train_model():
+    dls = DataBlock(
+        blocks=(ImageBlock, CategoryBlock),
+        get_items=get_image_files,
+        splitter=RandomSplitter(valid_pct=0.2, seed=42),
+        get_y=parent_label,
+        item_tfms=[Resize(192, method='squish')]
+    ).dataloaders(IMAGE_PARENT, bs=32)
+
+    # train
+    global LEARN_MODEL
+    logger.debug("Training Model...")
+    LEARN_MODEL = vision_learner(dls, resnet18, metrics=error_rate)
+    LEARN_MODEL.fine_tune(3)
+
+    return {"Status": "Completed"}
+
+def predict():
+
