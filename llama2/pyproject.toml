@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "llama2"
+version = "0.0.1"
+description = ""
+authors = ["Roman <iamromandev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.4"
+loguru = "0.7.0"
+uvicorn = "0.23.1"
+fastapi = { extras = ["all"], version = "0.96.0" }
+pydantic = { extras = ["all"], version = "1.10.12" }
+sqlmodel = "0.0.8"
+pymysql = "1.1.0"
+celery = "5.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

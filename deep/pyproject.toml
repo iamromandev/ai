@@ -14,10 +14,10 @@ python = "3.11.4"
 loguru = "0.7.0"
 coreapi = "2.3.3" # must be installed for TokenAuthentication
 ## django
-django = "4.1.9" # 4.2 drops support for mariadb 10.3
+django = "4.2.4" # 4.2 drops support for mariadb 10.3
 django-environ = "0.10.0"
-django-cors-headers = "4.0.0"
-django-browser-reload = "1.8.0"
+django-cors-headers = "4.2.0"
+django-browser-reload = "1.11.0"
 dj-static = "0.0.6"
 django-soft-delete = "0.9.21"
 django-taggit = "4.0.0"
@@ -30,7 +30,7 @@ django-bootstrap5 = "23.1"
 django-bootstrap-icons = "0.8.3"
 # django-tailwind = "3.5.0"
 ## others
-pymysql = "1.0.3"
+pymysql = "1.1.0"
 ## deep
 tensorflow = "2.13.0"
 

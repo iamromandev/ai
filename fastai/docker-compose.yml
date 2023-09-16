@@ -1,0 +1,86 @@
+services:
+  cache:
+    platform: linux/arm64
+    image: redis
+    hostname: cache
+    container_name: cache
+    restart: on-failure
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/cache:/var/lib/redis
+      - ./data/cache-config:/usr/local/etc/redis/redis.conf
+    networks:
+      - web
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      start_period: 3s
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  db:
+    platform: linux/arm64
+    image: mariadb:10.11
+    hostname: db
+    container_name: db
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/db:/var/lib/mysql/data
+    networks:
+      - web
+    command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      start_period: 3s
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  web:
+    platform: linux/arm64
+    hostname: web
+    container_name: web
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: local
+      args:
+        ENV: local
+        WORK_DIR: /workdir
+        PYTHON_VERSION: 3.11.4
+    ports:
+      - 8000:8000
+    links:
+      - db
+    volumes:
+      - .:/workdir
+      - ./data/input:/data/input:ro
+      - ./data/output:/data/output:rw
+    networks:
+      - web
+    depends_on:
+      cache:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    command: >
+      bash -c "python src/manage.py collectstatic --no-input
+      && python src/manage.py makemigrations
+      && python src/manage.py migrate
+      && python src/manage.py createcachetable
+      && python src/manage.py runserver 0.0.0.0:8000"
+    # after createcachetable && python src/manage.py createsuperuser --no-input --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL}
+
+networks:
+  web:
+    name: web
+    driver: bridge

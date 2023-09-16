@@ -1,12 +1,12 @@
-### Ignore ###
+### ignore ###
 .DS_Store
 .idea
 __pycache__
 poetry.lock
 data
 
-# Ignore generated files
+# ignore generated files
 **/*.pyc
 
-### Allow ###
+### allow ###
 !.env.example

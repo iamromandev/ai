@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "fastai-project"
+version = "0.0.1"
+description = ""
+authors = ["Roman <iamromandev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+## python
+python = "3.11.4"
+## reserved packages
+requests = "2.29.0" # for namecheap host issue
+## end reserved packages
+## core
+loguru = "0.7.2"
+coreapi = "2.3.3" # must be installed for TokenAuthentication
+## django
+django = "4.2.5"
+django-environ = "0.11.2"
+django-cors-headers = "4.2.0"
+django-browser-reload = "1.11.0"
+dj-static = "0.0.6"
+django-soft-delete = "0.9.21"
+django-taggit = "4.0.0"
+## rest
+djangorestframework = "3.14.0"
+djangorestframework-simplejwt = "5.3.0"
+## ui
+django-bootstrap5 = "23.3"
+django-bootstrap-icons = "0.8.4"
+## db
+pymysql = "1.0.3"
+## ai
+fastai = "2.7.12"
+## misc
+duckduckgo-search = "3.8.5"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "3.3.2"
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+include = '\.pyi?$'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
